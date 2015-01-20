@@ -1,0 +1,11 @@
+.DS_Store
+npm-debug.log
+node_modules
+*.sublime-project
+*.sublime-workspace
+coverage
+plato
+logs
+*.zip
+project/config/*.*
+!project/config/conf_template.js
