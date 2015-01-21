@@ -5,13 +5,14 @@
  */
 module.exports = function(sequelize, DataTypes) {
 	var Score = sequelize.define("Score", {
+		money_score: {type: DataTypes.DECIMAL(6,4)},
 	}, {
 		paranoid: true,
 		underscored: true,
 		classMethods: {
 			associate: function(models) {
 				Score.belongsTo(models.Card);
-				Score.hasOne(models.SubOrder);
+				Score.hasOne(models.Order);
 				Score.hasOne(models.ProductScore);
 			}
 		}
