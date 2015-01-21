@@ -1,32 +1,33 @@
 /*jslint node: true */
 "use strict";
 
-var fs        = require("fs");
-var path      = require("path");
-var Sequelize = require("sequelize");
-var sequelize = new Sequelize('loyteam', 'root', 'root', {
-       dialect : "mysql",
-       port : 8889,
-});
-var db        = {};
 
-fs
-  .readdirSync(__dirname)
-  .filter(function(file) {
-    return (file.indexOf(".") !== 0) && (file !== "index.js");
-  })
-  .forEach(function(file) {
-    var model = sequelize["import"](path.join(__dirname, file));
-    db[model.name] = model;
-  });
+module.exports = function(config){
+	var fs        = require("fs");
+	var path      = require("path");
+	var Sequelize = require("sequelize");
+	var sequelize = new Sequelize(config.dbname, config.user, config.pass, {
+		dialect : config.type,
+		port : config.port,
+	});
+	var db = {};
 
-Object.keys(db).forEach(function(modelName) {
-  if ("associate" in db[modelName]) {
-    db[modelName].associate(db);
-  }
-});
+	fs.readdirSync(__dirname)
+	.filter(function(file) {
+		return (file.indexOf(".") !== 0) && (file !== "index.js");
+	})
+	.forEach(function(file) {
+		var model = sequelize["import"](path.join(__dirname, file));
+		db[model.name] = model;
+	});
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+	Object.keys(db).forEach(function(modelName) {
+		if ("associate" in db[modelName]) {
+			db[modelName].associate(db);
+		}
+	});
 
-module.exports = db;
+	db.sequelize = sequelize;
+	db.Sequelize = Sequelize;
+	return db;
+};
