@@ -12,12 +12,15 @@
  */
 var express = require('express');
 var router = new express.Router();
+router.use(function(req, res, next){
+	console.log("sprawdzamy uprawnienia admin");
+	next();
+});
 router.use('/auth', require('./default/auth'));
 router.use('/partner', require('./admin/partner'));
 router.use('/customer', require('./admin/customer'));
 router.use('/card', require('./admin/card'));
 router.all("/*", function(req ,res, next){
-		res.writeHead(404);
-		res.end();
+		res.sendStatus(404);
 });
 module.exports = router;
