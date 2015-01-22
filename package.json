@@ -1,10 +1,14 @@
 {
-  "name": "loyteam_server",
-  "version": "0.0.1",
+  "name": "loyteam_api",
+  "version": "0.0.2",
   "description": "Strona serwerowa aplikacji loyteam, pełni rolę api",
   "main": "project/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://uhlryk_loyteamapi@artwave.vipserv.org/"
   },
   "author": "",
   "license": "ISC",

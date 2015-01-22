@@ -10,7 +10,7 @@ module.exports = function(environment){
 	morgan = require("morgan"),
 	models;
 	var app = express();
-	var port = process.env.PORT || 3000;
+	var port = process.env.PORT || config.app.port;
 	return {
 		getApp : app,
 		setConfig : function(){
