@@ -12,7 +12,7 @@ router.use(function(req, res, next){
 	next();
 });
 
-router.post("/auth/", require('./default/auth'));
+router.post("/authenticate/", require('./default/auth'));
 router.post("/customer/account/", require('./default/customer/account'));
 
 
@@ -46,8 +46,4 @@ router.post("/test/posts/", require('./default/test/add'));
 router.put("/test/posts/:id", require('./default/test/update'));
 router.delete("/test/posts/:id", require('./default/test/delete'));
 
-
-router.all("/*", function(req ,res, next){
-		res.sendStatus(404);
-});
 module.exports = router;

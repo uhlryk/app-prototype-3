@@ -22,10 +22,16 @@
     "mysql": "^2.5.4",
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",
+    "path": "^0.11.14",
     "sequelize": "^2.0.0-rc7",
     "static-favicon": "^2.0.0-alpha"
   },
   "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-concat": "^2.4.3",
+    "gulp-prompt": "^0.1.1",
+    "gulp-util": "^3.0.2",
+    "node-uuid": "^1.4.2",
     "tern-node-express": "^0.1.0"
   }
 }
