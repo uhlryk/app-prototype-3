@@ -20,8 +20,9 @@ module.exports = function(){
 			return this;
 		},
 		setMiddleware : function(){
+			var dbAuth = [];
 			app.use(function(req, res, next){
-				req.auth = [];
+				req.auth = dbAuth;
 				next();
 			});
 			app.use(morgan(config.logType));

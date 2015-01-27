@@ -20,12 +20,13 @@ module.exports = function(req, res, next) {
 			type : type,
 			username : "Admin"
 		});
-		// res.json({
-		// 	token : token,
-		// 	type : type,
-		// 	username : "Admin"
-		// });
-		res.send(200);
+		console.log(req.auth);
+		res.json({
+			token : token,
+			type : type,
+			username : "Admin"
+		});
+		// res.send(200);
 	}else{
 		res.send(401);
 	}
