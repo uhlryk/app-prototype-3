@@ -2,15 +2,14 @@ var bcrypt = require('bcrypt');
 module.exports = function(req, res, next){
 	var data = req.body;
 	req.models.sequelize.transaction().then(function (t) {
-		console.log(data.firm.is_mail_address);
-		return req.models.CustomerAccount.create({
+		return req.models.PartnerAccount.create({
 			type : "parent",
 			status : "active",
 			email : data.account.login,
 			password : bcrypt.hashSync(data.account.password, 8)
 		}, {transaction : t})
-		.then(function(customerAccount){
-			return req.models.Customer.create({
+		.then(function(partnerAccount){
+			return req.models.Partner.create({
 				status : "active",
 				firmname : data.firm.firmname,
 				nip : data.firm.nip,
@@ -30,8 +29,8 @@ module.exports = function(req, res, next){
 				lastname : data.contact.lastname,
 				phone : data.contact.phone,
 			}, {transaction : t})
-			.then(function(customer){
-				return customer.setCustomerAccounts([customerAccount], {transaction : t});
+			.then(function(partner){
+				return partner.setPartnerAccounts([partnerAccount], {transaction : t});
 			})
 			.then(function(){
 				t.commit();

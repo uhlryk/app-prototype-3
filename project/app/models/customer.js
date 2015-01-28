@@ -15,7 +15,7 @@ module.exports = function(sequelize, DataTypes) {
 		flat_address: DataTypes.STRING(10),
 		zipcode_address: DataTypes.STRING(10),
 		city_address: DataTypes.STRING(45),
-		is_mail_address: {type:DataTypes.ENUM('yes','no'), defaultValue:'yes'},
+		is_mail_address: {type:DataTypes.ENUM('yes','no'), defaultValue:'yes'},//czy adres korespondencyjny jest taki sam
 		name_mail: DataTypes.STRING(255),
 		street_mail: DataTypes.STRING(255),
 		house_mail: DataTypes.STRING(10),

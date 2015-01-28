@@ -17,6 +17,11 @@ module.exports = function(){
 				next();
 			});
 			models = require("./models")(config.db.normal);
+			app.use(function(req, res, next){
+				req.models = models;
+				next();
+			});
+
 			return this;
 		},
 		setMiddleware : function(){
@@ -31,14 +36,20 @@ module.exports = function(){
 			app.use(function(req, res, next) {
 				res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:3000');
 				res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-				res.header('Access-Control-Allow-Headers', 'Content-Type');
+				res.header('Access-Control-Allow-Headers', 'Content-Type, Access-Token, Accept, Origin, X-Requested-With');
 				next();
 			});
 			return this;
 		},
 		setRouter : function(){
-			app.use('/default', require('./routes/default'));
-			app.use('/admin', require('./routes/admin'));
+			app.options("*", function(req, res, next){
+				console.log("wejscie dla options");
+				res.sendStatus(200);
+			});
+			app.use('/default', require('./routes/default/default'));
+			app.use('/admin', require('./routes/admin/admin'));
+			app.use('/partner', require('./routes/partner/partner'));
+			app.use('/customer', require('./routes/customer/customer'));
 			app.use("/*", function(req ,res, next){
 				res.send("Jesteśmy");
 				res.end();

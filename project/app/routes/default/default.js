@@ -12,8 +12,8 @@ router.use(function(req, res, next){
 	next();
 });
 
-router.post("/authenticate/", require('./default/auth'));
-router.post("/customer/account/", require('./default/customer/account'));
+router.post("/authenticate/", require('./auth'));
+router.post("/customer/account/", require('./customer/account'));
 
 
 var data = [
@@ -40,10 +40,10 @@ router.all("/test/*", function(req, res, next){
 	console.log("jakieś specjalne sprawdzenie dla test tylko");
 	next();
 });
-router.get("/test/posts/", require('./default/test/list'));
-router.get("/test/posts/:id", require('./default/test/single'));
-router.post("/test/posts/", require('./default/test/add'));
-router.put("/test/posts/:id", require('./default/test/update'));
-router.delete("/test/posts/:id", require('./default/test/delete'));
+router.get("/test/posts/", require('./test/list'));
+router.get("/test/posts/:id", require('./test/single'));
+router.post("/test/posts/", require('./test/add'));
+router.put("/test/posts/:id", require('./test/update'));
+router.delete("/test/posts/:id", require('./test/delete'));
 
 module.exports = router;

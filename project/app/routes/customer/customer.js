@@ -1,5 +1,5 @@
 /**
- * Sekcja api dostępna dla administracji tylko
+ * Sekcja api dostępna dla klientów tylko
  */
 
 /**
@@ -13,12 +13,13 @@
 var express = require('express');
 var router = new express.Router();
 router.use(function(req, res, next){
-	console.log("sprawdzamy uprawnienia admin");
-	next();
+	var token = req.query.token;
+	if(token){
+		next();
+	}else{
+			res.sendStatus(401);
+	}
 });
-router.use('/auth', require('./default/auth'));
-router.use('/partner', require('./admin/partner'));
-router.use('/customer', require('./admin/customer'));
-router.use('/card', require('./admin/card'));
+// router.use('/partner', require('./admin/partner'));
 
 module.exports = router;
