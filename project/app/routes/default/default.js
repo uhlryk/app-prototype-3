@@ -12,10 +12,15 @@ router.use(function(req, res, next){
 	next();
 });
 
-router.post("/authenticate/", require('./auth'));
+router.post("/authenticate/customer", require('./authenticate/customer'));
+router.post("/authenticate/partner", require('./authenticate/partner'));
+router.post("/authenticate/admin", require('./authenticate/admin'));
+
 router.post("/customer/account/", require('./customer/account'));
 
 
+
+/** ------------------- Przykład poprawnego obsłużenia api, do usunięcia jak pokryjemy ---------------------------- */
 var data = [
 	{
 		id : 1353,
@@ -46,4 +51,5 @@ router.post("/test/posts/", require('./test/add'));
 router.put("/test/posts/:id", require('./test/update'));
 router.delete("/test/posts/:id", require('./test/delete'));
 
+/** ----------------------------------------------------------------------------------------------------------------- */
 module.exports = router;

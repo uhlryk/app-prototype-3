@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
 		status: {type: DataTypes.ENUM('inactive', 'active', 'disable', 'delete'), defaultValue:'active', allowNull: false},
 		email: {type: DataTypes.STRING(45), unique: true, allowNull: true},
 		email_validation: {type: DataTypes.STRING(45), unique: false, allowNull: true},
-		password: {type: DataTypes.STRING(45), allowNull: true},
+		password: {type: DataTypes.STRING(60), allowNull: true},
 	}, {
 		paranoid: true,
 		underscored: true,

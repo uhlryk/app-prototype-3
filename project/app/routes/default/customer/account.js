@@ -2,7 +2,8 @@ var bcrypt = require('bcrypt');
 module.exports = function(req, res, next){
 	var data = req.body;
 	req.models.sequelize.transaction().then(function (t) {
-		console.log(data.firm.is_mail_address);
+		console.log(bcrypt.hashSync(data.account.password, 8));
+		console.log(bcrypt.hashSync(data.account.password, 8).length);
 		return req.models.CustomerAccount.create({
 			type : "parent",
 			status : "active",
