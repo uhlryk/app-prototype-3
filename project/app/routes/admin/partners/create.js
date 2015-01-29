@@ -32,18 +32,11 @@ module.exports = function(req, res, next){
 			.then(function(partner){
 				return partner.setPartnerAccounts([partnerAccount], {transaction : t});
 			})
-			.then(function(){
-				t.commit();
-				res.sendStatus(200);
-			})
-			.catch(function(err){
-				t.rollback();
-				console.log("BŁĄD");
-				console.log(err);
-				console.log("BŁĄD");
-				res.sendStatus(406);
-			})
 			;
+		})
+		.then(function(){
+			t.commit();
+			res.sendStatus(200);
 		})
 		.catch(function(err){
 			t.rollback();

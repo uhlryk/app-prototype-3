@@ -9,7 +9,6 @@ module.exports = function(sequelize, DataTypes) {
 	var Product = sequelize.define("Product", {
 	}, {
 		paranoid: true,
-		underscored: true,
 		classMethods: {
 			associate: function(models) {
 				Product.hasMany(models.ProductScore);

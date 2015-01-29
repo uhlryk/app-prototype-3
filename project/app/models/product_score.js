@@ -8,7 +8,6 @@ module.exports = function(sequelize, DataTypes) {
 	var ProductScore = sequelize.define("ProductScore", {
 	}, {
 		paranoid: true,
-		underscored: true,
 		classMethods: {
 			associate: function(models) {
 				ProductScore.belongsTo(models.Score);

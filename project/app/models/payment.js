@@ -9,7 +9,6 @@ module.exports = function(sequelize, DataTypes) {
 		type: {type: DataTypes.ENUM('bonus', 'order'), defaultValue: 'bonus', allowNull: false},
 	}, {
 		paranoid: true,
-		underscored: true,
 		classMethods: {
 			associate: function(models) {
 				Payment.hasOne(models.Order);

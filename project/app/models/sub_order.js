@@ -14,7 +14,6 @@ module.exports = function(sequelize, DataTypes) {
 		money_score: {type: DataTypes.DECIMAL(6,2)},
 	}, {
 		paranoid: true,
-		underscored: true,
 		classMethods: {
 			associate: function(models) {
 				SubOrder.belongsTo(models.Order);

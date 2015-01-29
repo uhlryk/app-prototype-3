@@ -25,7 +25,6 @@ module.exports = function(sequelize, DataTypes) {
 		phone: DataTypes.STRING(15)
 	}, {
 		paranoid: true,
-		underscored: true,
 		classMethods: {
 			associate: function(models) {
 				Partner.hasMany(models.PartnerAccount);

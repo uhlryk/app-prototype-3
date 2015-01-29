@@ -16,7 +16,6 @@ module.exports = function(sequelize, DataTypes) {
 		password: DataTypes.STRING(60)
 	}, {
 		paranoid: true,
-		underscored: true,
 		classMethods: {
 			associate: function(models) {
 				PartnerAccount.belongsTo(models.Partner);

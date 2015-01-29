@@ -10,7 +10,6 @@ module.exports = function(sequelize, DataTypes) {
 	var ProductPartner = sequelize.define("ProductPartner", {
 	}, {
 		paranoid: true,
-		underscored: true,
 		classMethods: {
 			associate: function(models) {
 				ProductPartner.belongsTo(models.Product);

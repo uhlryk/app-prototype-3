@@ -24,7 +24,6 @@ module.exports = function(sequelize, DataTypes) {
 		money_app: {type: DataTypes.DECIMAL(6,2)},
 	}, {
 		paranoid: true,
-		underscored: true,
 		classMethods: {
 			associate: function(models) {
 				Order.belongsTo(models.Card);

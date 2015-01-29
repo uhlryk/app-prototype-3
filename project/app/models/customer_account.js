@@ -16,7 +16,6 @@ module.exports = function(sequelize, DataTypes) {
 		password: {type: DataTypes.STRING(60), allowNull: true},
 	}, {
 		paranoid: true,
-		underscored: true,
 		classMethods: {
 			associate: function(models) {
 				CustomerAccount.belongsToMany(models.Card, {through: 'CardCustomerAccount'});

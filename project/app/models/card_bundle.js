@@ -5,9 +5,10 @@
  */
 module.exports = function(sequelize, DataTypes) {
 	var CardBundle = sequelize.define("CardBundle", {
+		beginEAN : {type: DataTypes.BIGINT(12)},
+		endEAN : {type: DataTypes.BIGINT(12)}
 	}, {
 		paranoid: true,
-		underscored: true,
 		classMethods: {
 			associate: function(models) {
 				CardBundle.hasMany(models.Card);

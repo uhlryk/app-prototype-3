@@ -10,15 +10,15 @@
  */
 module.exports = function(sequelize, DataTypes) {
 	var Card = sequelize.define("Card", {
-		ean_code: {type: DataTypes.INTEGER, unique: true, allowNull: false},
+		ean_code: {type: DataTypes.BIGINT(13), unique: true, allowNull: false},
 		code: {type: DataTypes.STRING(5), unique: true, allowNull: false},
 		status: {type: DataTypes.ENUM('inactive', 'active', 'disable'), defaultValue:'inactive', allowNull: false},
 	}, {
 		paranoid: true,
-		underscored: true,
 		classMethods: {
 			associate: function(models) {
 				Card.belongsToMany(models.CustomerAccount, {through: 'CardCustomerAccount'});
+				Card.belongsTo(models.CardBundle);
 				Card.hasMany(models.Order);
 				Card.hasMany(models.Score);
 			}

@@ -14,4 +14,11 @@ router.use(function(req, res, next){
 });
 router.get('/partners', require('./partners/list'));
 router.post('/partners', require('./partners/create'));
+
+router.post('/cards', require('./cards/create'));
+router.get('/cards', require('./cards/list'));
+
+router.post('/customers', require('./customers/create'));
+router.get('/customers', require('./customers/list'));
+
 module.exports = router;
