@@ -7,15 +7,15 @@
  * lokacjami partnera.
  */
 module.exports = function(sequelize, DataTypes) {
-	var ProductPartner = sequelize.define("ProductPartner", {
+	var ProductPlace = sequelize.define("ProductPlace", {
 	}, {
 		paranoid: true,
 		classMethods: {
 			associate: function(models) {
-				ProductPartner.belongsTo(models.Product);
-				ProductPartner.belongsTo(models.PartnerAccount);
+				ProductPlace.belongsTo(models.Product);
+				ProductPlace.belongsTo(models.Place);
 			}
 		}
 	});
-	return ProductPartner;
+	return ProductPlace;
 };

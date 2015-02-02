@@ -67,7 +67,10 @@ module.exports = function(req, res, next){
 					;
 				} else{
 					return req.models.Card.find({
-						where : {status : "inactive"}
+						where : {
+							status : "inactive",
+							type : data.type
+						}
 					}, {transaction : t})
 					.then(function(card) {
 						if(card === null)

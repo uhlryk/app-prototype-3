@@ -30,7 +30,21 @@ module.exports = function(req, res, next){
 				phone : data.contact.phone,
 			}, {transaction : t})
 			.then(function(partner){
-				return partner.setPartnerAccounts([partnerAccount], {transaction : t});
+				return partner.setPartnerAccounts([partnerAccount], {transaction : t})
+				.then(function(){
+					return req.models.Place.create({
+						name : data.location
+					}, {transaction : t})
+					.then(function(place){
+						return place.setPartnerAccounts([partnerAccount], {transaction : t})
+						.then(function(){
+							return partner.setPlaces([place], {transaction : t});
+						})
+						;
+					})
+					;
+				})
+				;
 			})
 			;
 		})

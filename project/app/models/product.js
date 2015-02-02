@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
 		classMethods: {
 			associate: function(models) {
 				Product.hasMany(models.ProductScore);
-				Product.hasMany(models.ProductPartner);
+				Product.hasMany(models.ProductPlace);
 			}
 		}
 	});

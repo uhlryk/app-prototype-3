@@ -28,6 +28,7 @@ module.exports = function(sequelize, DataTypes) {
 		classMethods: {
 			associate: function(models) {
 				Partner.hasMany(models.PartnerAccount);
+				Partner.hasMany(models.Place);
 			}
 		}
 	});
