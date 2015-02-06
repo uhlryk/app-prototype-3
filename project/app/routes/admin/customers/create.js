@@ -67,9 +67,12 @@ module.exports = function(req, res, next){
 					;
 				} else{
 					return req.models.Card.find({
+						include : [
+							req.models.CardBundle
+						],
 						where : {
 							status : "inactive",
-							type : data.type
+							'CardBundle.type' : data.type
 						}
 					}, {transaction : t})
 					.then(function(card) {

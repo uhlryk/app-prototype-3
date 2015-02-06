@@ -5,6 +5,10 @@ module.exports = function(req, res, next) {
 	var password = req.body.password;
 	var role = "partner";
 	req.models.PartnerAccount.find({
+		include : [
+			req.models.Place,
+			req.models.Partner
+		],
 		where: { email: login }
 	})
 	.then(function(partnerAccount) {
@@ -14,16 +18,21 @@ module.exports = function(req, res, next) {
 		if(bcrypt.compareSync(password, partnerAccount.dataValues.password)){
 			console.log("SYNC");
 			var token = uuid.v1();
-			req.auth.push({
+			var data = {
 				token : token,
 				role : role,
-				username : partnerAccount.login
-			});
-			return res.json({
-				token : token,
-				role : role,
-				username : partnerAccount.login
-			});
+				username : partnerAccount.login,
+				data : {
+					firmname : partnerAccount.Partner.firmname,
+					places : partnerAccount.Places
+				}
+			};
+			// console.log(partnerAccount);
+			// console.log("----------------");
+			// console.log(partnerAccount.Places);
+			req.auth.push(data);
+			// console.log(data);
+			return res.json(data);
 		}else{
 			return res.sendStatus(403);
 		}
