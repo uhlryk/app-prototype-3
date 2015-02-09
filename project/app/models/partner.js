@@ -5,6 +5,8 @@
  */
 module.exports = function(sequelize, DataTypes) {
 	var Partner = sequelize.define("Partner", {
+		percentage_app: {type: DataTypes.DECIMAL(3,1)},
+		percentage_score: {type: DataTypes.DECIMAL(3,1)},
 		status: {type: DataTypes.ENUM('inactive', 'active', 'disable'), defaultValue:'inactive'},
 		firmname: DataTypes.STRING(255),
 		nip : {type: DataTypes.STRING(15), unique:false},

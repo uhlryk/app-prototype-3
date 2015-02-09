@@ -21,16 +21,14 @@ module.exports = function(req, res, next) {
 			var data = {
 				token : token,
 				role : role,
+				id : partnerAccount.id,
 				username : partnerAccount.login,
 				data : {
 					firmname : partnerAccount.Partner.firmname,
 					places : partnerAccount.Places
 				}
 			};
-			// console.log(partnerAccount);
-			// console.log("----------------");
-			// console.log(partnerAccount.Places);
-			req.auth.push(data);
+			req.auth.push(JSON.parse(JSON.stringify(data)));
 			// console.log(data);
 			return res.json(data);
 		}else{

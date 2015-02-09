@@ -5,7 +5,7 @@
  */
 module.exports = function(sequelize, DataTypes) {
 	var Score = sequelize.define("Score", {
-		money_score: {type: DataTypes.DECIMAL(6,4)},
+		score: {type: DataTypes.DECIMAL(6,4)},
 	}, {
 		paranoid: true,
 		classMethods: {

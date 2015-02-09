@@ -5,13 +5,34 @@ var express = require('express');
 var router = new express.Router();
 
 router.use(function(req, res, next){
-	var token = req.headers['access-token'];
-	if(token){
-		next();
-	}else{
-			res.sendStatus(401);
-	}
+//TYMCZASOWE DO SZYBKIEGO LOGOWANIA
+	req.partner ={ token: '0da26870-b0a4-11e4-9582-dfe96949e4ae',
+  role: 'partner',
+  id: 1,
+  data: { firmname: 'test', places: [ [Object] ] } };
+next();
+	// var token = req.headers['access-token'];
+	// if(token){
+	// 	var isPartner = false;
+	// 	req.auth.forEach(function(v){
+	// 		if(v.token === token){
+	// 			req.partner = v;
+	// 			console.log(v);
+	// 			next();
+	// 			isPartner = true;
+	// 		}
+	// 	});
+	// 	if(isPartner === false){
+	// 		res.sendStatus(401);
+	// 	}
+	// } else {
+	// 	res.sendStatus(401);
+	// }
 });
-// router.use('/partner', require('./admin/partner'));
+
+router.post('/orders', require('./orders/create'));
+router.get('/orders', require('./orders/list'));
+
+router.get('/payments', require('./payments/list'));
 
 module.exports = router;
