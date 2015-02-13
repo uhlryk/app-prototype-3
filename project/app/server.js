@@ -6,7 +6,9 @@ module.exports = function(){
 	var config = require(path.join(__dirname, '/../config/config'));
 	var bodyParser = require("body-parser"),
 	morgan = require("morgan"),
-	models;
+	models,
+	installDbData = require("./install/installDb")
+	;
 	var app = express();
 	var port = process.env.PORT || config.app.port;
 	return {
@@ -60,6 +62,7 @@ module.exports = function(){
 		},
 		run : function(){
 			models.sequelize.sync().then(function () {
+				installDbData(models);
 				app.listen(port, function() {
 					console.log('Express server listening on port ' + port);
 				});

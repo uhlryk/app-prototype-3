@@ -30,7 +30,7 @@ module.exports = function(sequelize, DataTypes) {
 				Order.belongsTo(models.CustomerAccount);
 				Order.belongsTo(models.PartnerAccount);
 				Order.belongsTo(models.Score);
-				Order.belongsToMany(models.Payment);
+				Order.hasMany(models.Payment);
 				Order.hasMany(models.SubOrder);
 			}
 		}

@@ -3,8 +3,8 @@ module.exports = function(req, res, next){
 		include: [
 			req.models.PartnerAccount,
 			{
-				model : req.models.Payment,
-				include : [
+				model: req.models.Payment,
+				include: [
 					req.models.Place
 				]
 			}

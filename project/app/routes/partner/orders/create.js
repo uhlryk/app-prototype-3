@@ -83,22 +83,20 @@ module.exports = function(req, res , next) {
 				money : sumMoneyScore,
 				type : 'order_score',
 				PartnerId : partnerAccountModel.id,
+				OrderId : orderModel.id,
 				PlaceId : data.order.place
 			}, {transaction : t})
-			.then(function(payment){
-				return payment.setOrder(orderModel, {transaction : t});
-			});
+			;
 		})
 		.then(function(){
 			return req.models.Payment.create({
 				money : moneyApp,
 				type : 'order_app',
 				PartnerId : partnerAccountModel.id,
+				OrderId : orderModel.id,
 				PlaceId : data.order.place
 			}, {transaction : t})
-			.then(function(payment){
-				return payment.setOrder(orderModel, {transaction : t});
-			});
+			;
 		})
 		.then(function(){
 			t.commit();

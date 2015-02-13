@@ -27,5 +27,7 @@ router.get('/payments', require('./payments/list'));
 
 router.get('/orders', require('./orders/list'));
 
+router.get('/locations', require('./locations/list'));
+
 
 module.exports = router;

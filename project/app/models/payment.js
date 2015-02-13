@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
 		paranoid: true,
 		classMethods: {
 			associate: function(models) {
-				Payment.hasOne	(models.Order);
+				Payment.belongsTo(models.Order);
 				Payment.belongsTo(models.Partner);
 				Payment.belongsTo(models.PartnerAccount);
 				Payment.belongsTo(models.Place);
