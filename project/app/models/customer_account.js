@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
 		paranoid: true,
 		classMethods: {
 			associate: function(models) {
-				CustomerAccount.belongsToMany(models.Card, {through: 'CardCustomerAccount'});
+				CustomerAccount.belongsToMany(models.Card, {through: 'CardCustomerAccounts'});
 				CustomerAccount.belongsTo(models.Customer);
 				CustomerAccount.hasMany(models.Order);
 			}

@@ -1,6 +1,8 @@
 var bcrypt = require('bcrypt');
 module.exports = function(req, res, next){
 	var data = req.body;
+	console.log(JSON.stringify(data.location.province));
+	var partnerAccountModel, partnerModel, placeModel;
 	req.models.sequelize.transaction().then(function (t) {
 		return req.models.PartnerAccount.create({
 			type : "parent",
@@ -9,6 +11,9 @@ module.exports = function(req, res, next){
 			password : bcrypt.hashSync(data.account.password, 8)
 		}, {transaction : t})
 		.then(function(partnerAccount){
+			partnerAccountModel = partnerAccount;
+		})
+		.then(function(){
 			return req.models.Partner.create({
 				status : "active",
 				firmname : data.firm.firmname,
@@ -28,25 +33,107 @@ module.exports = function(req, res, next){
 				firstname : data.contact.firstname,
 				lastname : data.contact.lastname,
 				phone : data.contact.phone,
-			}, {transaction : t})
-			.then(function(partner){
-				return partner.setPartnerAccounts([partnerAccount], {transaction : t})
+			}, {transaction : t});
+		})
+		.then(function(partner){
+			partnerModel = partner;
+		})
+		.then(function(){
+			return partnerModel.setPartnerAccounts([partnerAccountModel], {transaction : t});
+		})
+		.then(function(){
+			return req.models.Place.create({
+				name : data.location.name
+			}, {transaction : t});
+		})
+		.then(function(place){
+			placeModel = place;
+		})
+		.then(function(){
+			return placeModel.setPartnerAccounts([partnerAccountModel], {transaction : t});
+		})
+		.then(function(){
+			return partnerModel.setPlaces([placeModel], {transaction : t});
+		}, {transaction : t})
+		.then(function(){
+			return req.models.sequelize.Promise.map(data.location.province, function(provinceData) {
+				var provinceModel;
+				return req.models.Location.find({
+					where : {
+						id : provinceData.id,
+						level : 1
+					}
+				}, {transaction : t})
+				.then(function(province){
+					provinceModel = province;
+					if(province === null){
+						throw new Error("brak województwa " + provinceData.id);
+					}
+				})
 				.then(function(){
-					return req.models.Place.create({
-						name : data.location
-					}, {transaction : t})
-					.then(function(place){
-						return place.setPartnerAccounts([partnerAccount], {transaction : t})
+					var isAll = provinceData.district.length > 0 ? false : true;
+					return req.models.PlaceLocation.create({
+						PlaceId : placeModel.id,
+						LocationId : provinceModel.id,
+						isAll : isAll
+					}, {transaction : t});
+				})
+				.then(function(){
+					return req.models.sequelize.Promise.map(provinceData.district, function(districtData) {
+						var districtModel;
+						return req.models.Location.find({
+							where : {
+								id : districtData.id,
+								LocationId : provinceModel.id, //czy lokacja ma poprawną lokację nadrzędną
+								level : 2
+							}
+						}, {transaction : t})
+						.then(function(district){
+							districtModel = district;
+							if(district === null){
+								throw new Error("brak powiatu " + districtData.id);
+							}
+						})
 						.then(function(){
-							return partner.setPlaces([place], {transaction : t});
+							var isAll = districtData.community.length > 0 ? false : true;
+							return req.models.PlaceLocation.create({
+								PlaceId : placeModel.id,
+								LocationId : districtModel.id,
+								isAll : isAll
+							}, {transaction : t});
+						})
+						.then(function(){
+							return req.models.sequelize.Promise.map(districtData.community, function(communityData) {
+								var communityModel;
+								return req.models.Location.find({
+									where : {
+										id : communityData.id,
+										LocationId : districtModel.id, //czy lokacja ma poprawną lokację nadrzędną
+										level : 3
+									},
+								}, {transaction : t})
+								.then(function(community){
+									communityModel = community;
+									if(community === null){
+										throw new Error("brak gminy " + communityData.id);
+									}
+								})
+								.then(function(){
+									return req.models.PlaceLocation.create({
+										PlaceId : placeModel.id,
+										LocationId : communityModel.id,
+										isAll : false
+									}, {transaction : t});
+								})
+								;
+							})
+							;
 						})
 						;
 					})
 					;
-				})
-				;
-			})
-			;
+				});
+			});
 		})
 		.then(function(){
 			t.commit();
@@ -61,5 +148,4 @@ module.exports = function(req, res, next){
 		})
 		;
 	});
-
 };

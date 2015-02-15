@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
 		classMethods: {
 			associate: function(models) {
 				Location.hasOne(models.Location);
-				Location.belongsToMany(models.Place, {through: 'PlaceLocation'});
+				Location.hasMany(models.PlaceLocation);
 			}
 		}
 	});

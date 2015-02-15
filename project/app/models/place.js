@@ -12,8 +12,8 @@ module.exports = function(sequelize, DataTypes) {
 		paranoid: true,
 		classMethods: {
 			associate: function(models) {
-				Place.belongsToMany(models.PartnerAccount, {through: 'PlacePartnerAccount'});
-				Place.belongsToMany(models.Location, {through: 'PlaceLocation'});
+				Place.belongsToMany(models.PartnerAccount, {through: 'PlacePartnerAccounts'});
+				Place.hasMany(models.PlaceLocation);
 				Place.belongsTo(models.Partner);
 			}
 		}

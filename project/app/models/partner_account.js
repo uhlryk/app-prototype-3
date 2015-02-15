@@ -19,7 +19,7 @@ module.exports = function(sequelize, DataTypes) {
 		classMethods: {
 			associate: function(models) {
 				PartnerAccount.belongsTo(models.Partner);
-				PartnerAccount.belongsToMany(models.Place, {through: 'PlacePartnerAccount'});
+				PartnerAccount.belongsToMany(models.Place, {through: 'PlacePartnerAccounts'});
 				PartnerAccount.hasMany(models.Order);
 				PartnerAccount.hasMany(models.Payment);
 
