@@ -9,7 +9,7 @@
 module.exports = function(sequelize, DataTypes) {
 	var Payment = sequelize.define("Payment", {
 		money: {type: DataTypes.DECIMAL(6,2)},
-		type: {type: DataTypes.ENUM('package','fee', 'order_app', 'order_score : '), defaultValue: 'package', allowNull: false},
+		type: {type: DataTypes.ENUM('package','fee', 'order_app', 'order_score'), defaultValue: 'package', allowNull: false},
 		title : {type : DataTypes.STRING(50), allowNull : true},
 		date_use: {type: DataTypes.DATE},
 	}, {

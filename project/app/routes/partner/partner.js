@@ -8,7 +8,7 @@ router.use(function(req, res, next){
 //TYMCZASOWE DO SZYBKIEGO LOGOWANIA
 	req.partner ={ token: '0da26870-b0a4-11e4-9582-dfe96949e4ae',
   role: 'partner',
-  id: 1,
+  id: 3,
   data: { firmname: 'test', places: [ [Object] ] } };
 next();
 	// var token = req.headers['access-token'];

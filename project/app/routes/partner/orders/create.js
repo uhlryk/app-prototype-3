@@ -30,7 +30,7 @@ module.exports = function(req, res , next) {
 		.then(function(){
 			return 	req.models.PartnerAccount.find({
 				include : [
-					req.models.Place
+					req.models.Place, req.models.Partner
 				],
 				where : {
 					id : req.partner.id,
@@ -71,7 +71,8 @@ module.exports = function(req, res , next) {
 		})
 		.then(function(){
 			return req.models.Score.create({
-				score : sumMoneyScore * HC_conv_cash_score
+				score : sumMoneyScore * HC_conv_cash_score,
+				CardId : cardModel.id,
 			},{transaction : t})
 			.then(function(score){
 				score.setOrder(orderModel, {transaction : t});
@@ -82,7 +83,8 @@ module.exports = function(req, res , next) {
 			return req.models.Payment.create({
 				money : sumMoneyScore,
 				type : 'order_score',
-				PartnerId : partnerAccountModel.id,
+				PartnerId : partnerAccountModel.Partner.id,
+				PartnerAccountId : partnerAccountModel.id,
 				OrderId : orderModel.id,
 				PlaceId : data.order.place
 			}, {transaction : t})
@@ -92,7 +94,8 @@ module.exports = function(req, res , next) {
 			return req.models.Payment.create({
 				money : moneyApp,
 				type : 'order_app',
-				PartnerId : partnerAccountModel.id,
+				PartnerId : partnerAccountModel.Partner.id,
+				PartnerAccountId : partnerAccountModel.id,
 				OrderId : orderModel.id,
 				PlaceId : data.order.place
 			}, {transaction : t})
