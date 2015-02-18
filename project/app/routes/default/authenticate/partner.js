@@ -23,6 +23,7 @@ module.exports = function(req, res, next) {
 				id : partnerAccount.id,
 				username : partnerAccount.email,
 				data : {
+					partnerId : partnerAccount.Partner.id,
 					firmname : partnerAccount.Partner.firmname,
 					places : partnerAccount.Places
 				}

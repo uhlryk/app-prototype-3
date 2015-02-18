@@ -1,8 +1,8 @@
 module.exports = function(req, res, next){
 	req.models.Payment.findAll({
-		include: [ ],
+		include: [req.models.Place, req.models.PartnerAccount, req.models.Order],
 		where : {
-			PartnerAccountId : req.user.id
+			PartnerId : req.user.data.partnerId
 		}
 	})
 	.then(function(orders) {
