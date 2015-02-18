@@ -7,7 +7,8 @@ module.exports = function(){
 	var bodyParser = require("body-parser"),
 	morgan = require("morgan"),
 	models,
-	installDbData = require("./install/installDb")
+	installDbData = require("./install/installDb"),
+	redis = require("redis").createClient()
 	;
 	var app = express();
 	var port = process.env.PORT || config.app.port;
@@ -21,6 +22,7 @@ module.exports = function(){
 			models = require("./models")(config.db.normal);
 			app.use(function(req, res, next){
 				req.models = models;
+				req.redis = redis;
 				next();
 			});
 

@@ -7,9 +7,23 @@ var router = new express.Router();
 router.use(function(req, res, next){
 	var token = req.headers['access-token'];
 	if(token){
-		next();
-	}else{
-		res.sendStatus(401);
+		req.redis.get('t_' + token, function(error, result) {
+			var user = JSON.parse(result);
+			if (error) {
+				return res.sendStatus(403, error);
+			} else {
+				if(user === null){
+					res.sendStatus(401);
+				} else {
+					req.user = user;
+					if(user.role === "admin"){
+						return next();
+					} else {
+						res.sendStatus(401);
+					}
+				}
+			}
+		});
 	}
 });
 router.get('/partners', require('./partners/list'));

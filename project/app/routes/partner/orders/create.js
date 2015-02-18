@@ -33,7 +33,7 @@ module.exports = function(req, res , next) {
 					req.models.Place, req.models.Partner
 				],
 				where : {
-					id : req.partner.id,
+					id : req.user.id,
 					'Places.id' : data.order.place
 				}
 			}, {transaction : t});

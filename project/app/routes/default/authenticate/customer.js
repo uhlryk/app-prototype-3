@@ -12,17 +12,19 @@ module.exports = function(req, res, next) {
 			return res.sendStatus(403);
 		}
 		if(bcrypt.compareSync(password, customerAccount.dataValues.password)){
-			console.log("SYNC");
 			var token = uuid.v1();
-			req.auth.push({
+			var data = {
 				token : token,
 				role : role,
+				id : customerAccount.id,
 				username : customerAccount.login
-			});
-			return res.json({
-				token : token,
-				role : role,
-				username : customerAccount.login
+			};
+			req.redis.set('t_' + token, JSON.stringify(data), function(error, result) {
+					if (error) {
+						return res.sendStatus(403, error);
+					} else {
+						return res.json(data);
+					}
 			});
 		}else{
 			return res.sendStatus(403);

@@ -16,21 +16,24 @@ module.exports = function(req, res, next) {
 			return res.sendStatus(403);
 		}
 		if(bcrypt.compareSync(password, partnerAccount.dataValues.password)){
-			console.log("SYNC");
 			var token = uuid.v1();
 			var data = {
 				token : token,
 				role : role,
 				id : partnerAccount.id,
-				username : partnerAccount.login,
+				username : partnerAccount.email,
 				data : {
 					firmname : partnerAccount.Partner.firmname,
 					places : partnerAccount.Places
 				}
 			};
-			req.auth.push(JSON.parse(JSON.stringify(data)));
-			// console.log(data);
-			return res.json(data);
+			req.redis.set('t_' + token, JSON.stringify(data), function(error, result) {
+				if (error) {
+					return res.sendStatus(403, error);
+				} else {
+					return res.json(data);
+				}
+			});
 		}else{
 			return res.sendStatus(403);
 		}
