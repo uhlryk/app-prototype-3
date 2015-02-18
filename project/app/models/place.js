@@ -15,6 +15,8 @@ module.exports = function(sequelize, DataTypes) {
 				Place.belongsToMany(models.PartnerAccount, {through: 'PlacePartnerAccounts'});
 				Place.hasMany(models.PlaceLocation);
 				Place.belongsTo(models.Partner);
+				Place.hasMany(models.Payment);
+				Place.hasMany(models.Order);
 			}
 		}
 	});

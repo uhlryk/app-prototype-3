@@ -54,7 +54,8 @@ module.exports = function(req, res , next) {
 				percentage_app : HC_percentageApp,
 				money_app : moneyApp,
 				CardId : cardModel.id,
-				PartnerAccountId : partnerAccountModel.id
+				PartnerAccountId : partnerAccountModel.id,
+				PlaceId : data.order.place
 			}, {transaction : t});
 		})
 		.then(function(order){

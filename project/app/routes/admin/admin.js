@@ -30,8 +30,10 @@ router.get('/partners', require('./partners/list'));
 router.get("/partners/:id", require('./partners/single'));
 router.post('/partners', require('./partners/create'));
 
-router.post('/cards', require('./cards/create'));
-router.get('/cards', require('./cards/list'));
+router.post('/cards-bundle', require('./cardsbundle/create'));
+router.get('/cards-bundle', require('./cardsbundle/list'));
+
+router.get('/cards/:bundleId', require('./cards/list'));
 
 router.post('/customers', require('./customers/create'));
 router.get('/customers', require('./customers/list'));

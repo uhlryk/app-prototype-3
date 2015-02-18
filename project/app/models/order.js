@@ -32,6 +32,7 @@ module.exports = function(sequelize, DataTypes) {
 				Order.belongsTo(models.Score);
 				Order.hasMany(models.Payment);
 				Order.hasMany(models.SubOrder);
+				Order.belongsTo(models.Place);
 			}
 		}
 	});

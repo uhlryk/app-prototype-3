@@ -1,6 +1,12 @@
 module.exports = function(req, res, next){
-	req.models.CardBundle.findAll()
-	.then(function(cardBundle) {
-		res.json(cardBundle);
+	var bundleId = Number(req.params.bundleId);
+	req.models.Card.findAll({
+		where : {
+			'CardBundleId' : bundleId
+		},
+		include : [req.models.Customer, req.models.CardBundle]
+	})
+	.then(function(cards) {
+		res.json(cards);
 	});
 };
