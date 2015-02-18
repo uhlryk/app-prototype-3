@@ -20,7 +20,7 @@ module.exports = function(req, res, next){
 					money : data.money,
 					PartnerId : data.partnerId,
 					PlaceId : data.placeId,
-					date_use : data.date_use,
+			//		date_use : data.date_use,
 					type : data.type,
 					title : data.title
 				}, {transaction : t})

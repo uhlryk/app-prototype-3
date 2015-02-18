@@ -82,7 +82,7 @@ module.exports = function(req, res , next) {
 		})
 		.then(function(){
 			return req.models.Payment.create({
-				money : sumMoneyScore,
+				money : -sumMoneyScore,
 				type : 'order_score',
 				PartnerId : partnerAccountModel.Partner.id,
 				PartnerAccountId : partnerAccountModel.id,
@@ -93,7 +93,7 @@ module.exports = function(req, res , next) {
 		})
 		.then(function(){
 			return req.models.Payment.create({
-				money : moneyApp,
+				money : -moneyApp,
 				type : 'order_app',
 				PartnerId : partnerAccountModel.Partner.id,
 				PartnerAccountId : partnerAccountModel.id,
