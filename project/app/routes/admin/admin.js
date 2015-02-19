@@ -37,6 +37,7 @@ router.get('/cards/:bundleId', require('./cards/list'));
 
 router.post('/customers', require('./customers/create'));
 router.get('/customers', require('./customers/list'));
+router.get('/customers/:id', require('./customers/single'));
 
 router.post('/payments', require('./payments/create'));
 router.get('/payments', require('./payments/list'));

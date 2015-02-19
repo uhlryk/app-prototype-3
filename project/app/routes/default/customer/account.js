@@ -2,6 +2,7 @@ var bcrypt = require('bcrypt');
 module.exports = function(req, res, next){
 	var data = req.body;
 	console.log(data);
+	var customerModel;
 	req.models.sequelize.transaction().then(function (t) {
 		console.log(bcrypt.hashSync(data.account.password, 8));
 		console.log(bcrypt.hashSync(data.account.password, 8).length);
@@ -33,7 +34,7 @@ module.exports = function(req, res, next){
 				phone : data.contact.phone,
 			}, {transaction : t})
 			.then(function(customer){
-				console.log("inner");
+				customerModel = customer;
 				return customer.setCustomerAccounts([customerAccount], {transaction : t});
 			})
 			.then(function(){
@@ -42,7 +43,8 @@ module.exports = function(req, res, next){
 						return req.models.Card.find({
 							where : {
 								ean_code : v.ean,
-								code : v.code
+								code : v.code,
+								status : "inactive"
 							}
 						}, {transaction : t})
 						.then(function(card){
@@ -52,7 +54,8 @@ module.exports = function(req, res, next){
 								return card.addCustomerAccount(customerAccount, {transaction : t })
 								.then(function(){
 									return card.update({
-										status : "active"
+										status : "active",
+										CustomerId : customerModel.id
 									}, {
 										where : { id : card.id },
 										transaction : t
@@ -67,7 +70,13 @@ module.exports = function(req, res, next){
 					;
 				} else{
 					return req.models.Card.find({
-						where : {status : "inactive"}
+						include : [
+							req.models.CardBundle
+						],
+						where : {
+							status : "inactive",
+							'CardBundle.type' : data.type
+						}
 					}, {transaction : t})
 					.then(function(card) {
 						if(card === null)
@@ -77,7 +86,8 @@ module.exports = function(req, res, next){
 							return card.addCustomerAccount(customerAccount, {transaction : t })
 							.then(function(){
 								return card.update({
-									status : "active"
+									status : "active",
+									CustomerId : customerModel.id
 								}, {
 									where : { id : card.id },
 									transaction : t
