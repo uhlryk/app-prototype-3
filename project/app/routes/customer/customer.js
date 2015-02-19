@@ -37,5 +37,6 @@ router.use(function(req, res, next){
 router.get('/cards/', require('./cards/list'));
 
 router.get('/accounts/', require('./accounts/list'));
+router.get('/orders/', require('./orders/list'));
 
 module.exports = router;
