@@ -34,6 +34,6 @@ router.use(function(req, res, next){
 		});
 	}
 });
-// router.use('/partner', require('./admin/partner'));
+router.get('/cards/', require('./cards/list'));
 
 module.exports = router;

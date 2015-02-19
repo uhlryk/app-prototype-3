@@ -5,6 +5,7 @@ module.exports = function(req, res, next) {
 	var password = req.body.password;
 	var role = "customer";
 	req.models.CustomerAccount.find({
+		include : [req.models.Customer],
 		where: { email: login }
 	})
 	.then(function(customerAccount) {
@@ -17,7 +18,11 @@ module.exports = function(req, res, next) {
 				token : token,
 				role : role,
 				id : customerAccount.id,
-				username : customerAccount.login
+				username : customerAccount.login,
+				data : {
+					customerId : customerAccount.Customer.id,
+					firmname : customerAccount.Customer.firmname
+				}
 			};
 			req.redis.set('t_' + token, JSON.stringify(data), function(error, result) {
 					if (error) {
