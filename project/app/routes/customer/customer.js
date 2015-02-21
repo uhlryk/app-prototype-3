@@ -35,6 +35,8 @@ router.use(function(req, res, next){
 	}
 });
 router.get('/cards/', require('./cards/list'));
+router.post('/cards/add', require('./cards/add'));
+router.post('/cards/create', require('./cards/create'));
 
 router.get('/accounts/', require('./accounts/list'));
 router.get('/orders/', require('./orders/list'));
