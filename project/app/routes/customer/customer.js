@@ -39,6 +39,8 @@ router.post('/cards/add', require('./cards/add'));
 router.post('/cards/create', require('./cards/create'));
 
 router.get('/accounts/', require('./accounts/list'));
+router.post('/accounts/', require('./accounts/create'));
+
 router.get('/orders/', require('./orders/list'));
 
 module.exports = router;
