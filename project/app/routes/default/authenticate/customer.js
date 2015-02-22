@@ -10,7 +10,7 @@ module.exports = function(req, res, next) {
 	})
 	.then(function(customerAccount) {
 		if(customerAccount === null){
-			return res.sendStatus(403);
+			return res.status(422).send("INCORRECT_LOGIN_PASSWORD");
 		}
 		if(bcrypt.compareSync(password, customerAccount.dataValues.password)){
 			var token = uuid.v1();
@@ -26,13 +26,14 @@ module.exports = function(req, res, next) {
 			};
 			req.redis.set('t_' + token, JSON.stringify(data), function(error, result) {
 					if (error) {
-						return res.sendStatus(403, error);
+						console.log(error);
+						return res.sendStatus(500);
 					} else {
 						return res.json(data);
 					}
 			});
 		}else{
-			return res.sendStatus(403);
+			return res.status(422).send("INCORRECT_LOGIN_PASSWORD");
 		}
 	});
 };

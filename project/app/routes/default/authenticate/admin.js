@@ -13,12 +13,12 @@ module.exports = function(req, res, next) {
 		};
 		req.redis.set('t_' + token, JSON.stringify(data), function(error, result) {
 				if (error) {
-					return res.sendStatus(403, error);
+					return res.sendStatus(500);
 				} else {
 					return res.json(data);
 				}
 		});
 	}else{
-		return res.sendStatus(403);
+		return res.status(422).send("INCORRECT_LOGIN_PASSWORD");
 	}
 };
