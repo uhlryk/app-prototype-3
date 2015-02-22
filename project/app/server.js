@@ -6,7 +6,7 @@ module.exports = function(){
 	var config = require(path.join(__dirname, '/../config/config'));
 	var bodyParser = require("body-parser"),
 	morgan = require("morgan"),
-	models,
+	models, actions,
 	installDbData = require("./install/installDb"),
 	redis = require("redis").createClient()
 	;
@@ -20,8 +20,10 @@ module.exports = function(){
 				next();
 			});
 			models = require("./models")(config.db.normal);
+			actions = require("./actions")({});
 			app.use(function(req, res, next){
 				req.models = models;
+				req.actions = actions;
 				req.redis = redis;
 				next();
 			});
@@ -29,9 +31,19 @@ module.exports = function(){
 			return this;
 		},
 		setMiddleware : function(){
-			var dbAuth = [];
 			app.use(function(req, res, next){
-				req.auth = dbAuth;
+			/**
+			 *  przez ten middleware realizujemy wszystkie responsy z serwera
+			 */
+				res.sendData = function(responseData){
+					if(responseData.status === 200 && responseData.data){
+						res.json(responseData.data);
+					} else if(responseData.code){
+						res.status(responseData.status).send(responseData.code);
+					} else {
+						res.sendStatus(responseData.status);
+					}
+				};
 				next();
 			});
 			app.use(morgan(config.logType));
@@ -58,8 +70,6 @@ module.exports = function(){
 				res.send("Jesteśmy");
 				res.end();
 			});
-			// app.use('/customer', require('./routes/customer').middleware);
-			// app.use('/partner', require('./routes/partner').middleware);
 			return this;
 		},
 		run : function(){

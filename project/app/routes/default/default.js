@@ -16,7 +16,13 @@ router.post("/authenticate/customer", require('./authenticate/customer'));
 router.post("/authenticate/partner", require('./authenticate/partner'));
 router.post("/authenticate/admin", require('./authenticate/admin'));
 
-router.post("/customer/account/", require('./customer/account'));
-
-
+// router.post("/customer/account/", require('../project/app/actions/accounts/create_customer'));
+router.post("/customer/account/", function(req, res, next){
+	req.actions.customers.createCustomer({
+		data : req.body,
+		models : req.models
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
 module.exports = router;
