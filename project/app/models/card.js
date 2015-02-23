@@ -10,10 +10,29 @@
  */
 module.exports = function(sequelize, DataTypes) {
 	var Card = sequelize.define("Card", {
-		name : {type : DataTypes.STRING(50), allowNull : true},
-		ean_code: {type: DataTypes.BIGINT(13), unique: true, allowNull: false},
-		code: {type: DataTypes.STRING(5), unique: true, allowNull: false},
-		status: {type: DataTypes.ENUM('inactive', 'active', 'disable'), defaultValue:'inactive', allowNull: false}
+		name : {
+			type : DataTypes.STRING(50),
+			allowNull : true,
+			validate : {
+			}
+		},
+		ean_code: {
+			//generowane przez serwer więc bezpieczne
+			type: DataTypes.BIGINT(13),
+			unique: true,
+			allowNull: false
+		},
+		code: {
+			//generowane przez serwer więc bezpieczne
+			type: DataTypes.STRING(5),
+			unique: true,
+			allowNull: false
+		},
+		status: {
+			type: DataTypes.ENUM('inactive', 'active', 'disable'),
+			defaultValue:'inactive',
+			allowNull: false
+		}
 	}, {
 		paranoid: true,
 		classMethods: {

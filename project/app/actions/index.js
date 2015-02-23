@@ -30,7 +30,20 @@ module.exports = function(config){
 				return v.toUpperCase();
 			})
 			.replace(/_/,"");
-			actions[controller][fileName] = require(path.join(actionPath, file));
+			/**
+			 *  to poniżej mogło by mieć postać
+			 *  actions[controller][fileName] = require(path.join(actionPath, file));
+			 *  ale chcemy automatycznie do konfiguracji dodać model z sequelize
+			 *  dzięki czemu gd używamy akcji podajemy tylko config i callback, nie musimy
+			 *  dodawać modeli
+			 *  akcja jest function(config, cb, models) a używamy
+			 *  function(config, cb)
+			 */
+
+			var _action = require(path.join(actionPath, file));
+			actions[controller][fileName] = function(c, cb){
+				_action(c, cb, config.models);
+			};
 		});
 	});
 	console.log(actions);

@@ -9,11 +9,38 @@
  */
 module.exports = function(sequelize, DataTypes) {
 	var CustomerAccount = sequelize.define("CustomerAccount", {
-		type: {type: DataTypes.ENUM('parent', 'child'), defaultValue: 'parent', allowNull: false},
-		status: {type: DataTypes.ENUM('inactive', 'active', 'disable', 'delete'), defaultValue:'active', allowNull: false},
-		email: {type: DataTypes.STRING(45), unique: true, allowNull: true},
-		email_validation: {type: DataTypes.STRING(45), unique: false, allowNull: true},
-		password: {type: DataTypes.STRING(60), allowNull: true},
+		type: {
+			type: DataTypes.ENUM('parent', 'child'),
+			defaultValue: 'parent',
+			allowNull: false
+		},
+		status: {
+			type: DataTypes.ENUM('inactive', 'active', 'disable', 'delete'),
+			defaultValue:'active',
+			allowNull: false
+		},
+		email: {
+			//docelowo to pole jest puste i tworzenia konta wypełnia pole email_validation
+			//user jeśli aktywuje konto, wtedy z pola email_validation jest przepisanie na email
+			type: DataTypes.STRING(45),
+			unique: true,
+			allowNull: true,
+			validate : {
+				isEmail : true,
+			}
+		},
+		email_validation: {
+			type: DataTypes.STRING(45),
+			unique: false,
+			allowNull: true,
+			validate : {
+				isEmail : true,
+			}
+		},
+		password: {
+			type: DataTypes.STRING(60),
+			allowNull: true,
+		},
 	}, {
 		paranoid: true,
 		classMethods: {

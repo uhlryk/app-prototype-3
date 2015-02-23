@@ -20,7 +20,9 @@ module.exports = function(){
 				next();
 			});
 			models = require("./models")(config.db.normal);
-			actions = require("./actions")({});
+			actions = require("./actions")({
+				models : models
+			});
 			app.use(function(req, res, next){
 				req.models = models;
 				req.actions = actions;

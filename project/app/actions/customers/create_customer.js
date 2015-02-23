@@ -1,9 +1,16 @@
 var bcrypt = require('bcrypt');
-module.exports = function(config, cb){
+/**
+ * Zwracane 422:
+ * DUPLICATE_USER już istnieje taki user o takim emailu
+ * WRONG_CARD jak user poda kartę ale ona nie istnieje lub nie ma do niej praw
+ * LACK_OF_CARDS przy generowaniu kart jak danego typu już nie ma
+ */
+
+module.exports = function(config, cb, models){
 	var data = config.data;
 	var customerAccountModel, customerModel;
-	config.models.sequelize.transaction().then(function (t) {
-		return config.models.CustomerAccount.create({
+	models.sequelize.transaction().then(function (t) {
+		return models.CustomerAccount.create({
 			type : "parent",
 			status : "active",
 			email : data.account.login,
@@ -13,7 +20,16 @@ module.exports = function(config, cb){
 			customerAccountModel = customerAccount;
 		})
 		.then(function(){
-			return config.models.Customer.create({
+			if(data.firm.is_mail_address){
+				data.mail.name_mail = data.firm.firmname;
+				data.mail.street_mail = data.firm.street_address;
+				data.mail.house_mail = data.firm.house_address;
+				data.mail.flat_mail = data.firm.flat_address;
+				data.mail.zipcode_mail = data.firm.zipcode_address;
+				data.mail.city_mail = data.firm.city_address;
+			}
+	console.log(data);
+			return models.Customer.create({
 				status : "active",
 				firmname : data.firm.firmname,
 				nip : data.firm.nip,
@@ -22,7 +38,7 @@ module.exports = function(config, cb){
 				flat_address : data.firm.flat_address,
 				zipcode_address : data.firm.zipcode_address,
 				city_address : data.firm.city_address,
-				is_mail_address : data.firm.is_mail_address,
+				is_mail_address : data.firm.is_mail_address?"yes":"no",
 				name_mail : data.mail.name_mail,
 				street_mail : data.mail.street_mail,
 				house_mail : data.mail.house_mail,
@@ -41,8 +57,8 @@ module.exports = function(config, cb){
 		.then(function(){
 			var cardModel;
 			if(data.card && data.card.length > 0){
-				return config.models.sequelize.Promise.map(data.card, function(v, i) {
-					return config.models.Card.find({
+				return models.sequelize.Promise.map(data.card, function(v, i) {
+					return models.Card.find({
 						where : {
 							ean_code : v.ean,
 							code : v.code,
@@ -69,9 +85,9 @@ module.exports = function(config, cb){
 					});
 				}) ;
 			} else{
-				return config.models.Card.find({
+				return models.Card.find({
 					include : [
-						config.models.CardBundle
+						models.CardBundle
 					],
 					where : {
 						status : "inactive",
@@ -81,7 +97,7 @@ module.exports = function(config, cb){
 				.then(function(card) {
 					cardModel = card;
 					if(card === null){
-						throw {code : "LACK_OF_CARD"};
+						throw {code : "LACK_OF_CARDS"};
 					}
 				})
 				.then(function(){
@@ -102,16 +118,23 @@ module.exports = function(config, cb){
 			t.commit();
 			cb({status :200 });
 		})
+		.catch(models.Sequelize.ValidationError, function (err) {
+			t.rollback();
+			if(err.name === 'SequelizeUniqueConstraintError'){
+				cb({status :422, code : "DUPLICATE_USER"});
+			} else {
+				cb({status :500});
+			}
+			console.log(err);
+		})
 		.catch(function(err){
 			t.rollback();
 			console.log(err);
 			if (err.code){
-				cb({status :422, code : err.code});
 			} else{
 				cb({status :500});
 			}
 		})
 		;
 	});
-
 };

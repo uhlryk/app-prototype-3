@@ -8,23 +8,109 @@
 module.exports = function(sequelize, DataTypes) {
 	var Customer = sequelize.define("Customer", {
 		status: {type: DataTypes.ENUM('inactive', 'active', 'disable'), defaultValue:'inactive'},
-		firmname: DataTypes.STRING(255),
-		nip : {type: DataTypes.STRING(15), unique:false},
-		street_address: DataTypes.STRING(255),
-		house_address: DataTypes.STRING(10),
-		flat_address: DataTypes.STRING(10),
-		zipcode_address: DataTypes.STRING(10),
-		city_address: DataTypes.STRING(45),
-		is_mail_address: {type:DataTypes.ENUM('yes','no'), defaultValue:'yes'},//czy adres korespondencyjny jest taki sam
-		name_mail: DataTypes.STRING(255),
-		street_mail: DataTypes.STRING(255),
-		house_mail: DataTypes.STRING(10),
-		flat_mail: DataTypes.STRING(10),
-		zipcode_mail: DataTypes.STRING(10),
-		city_mail: DataTypes.STRING(45),
-		firstname: DataTypes.STRING(45),
-		lastname: DataTypes.STRING(45),
-		phone: DataTypes.STRING(15)
+		firmname: {
+			type: DataTypes.STRING(255),
+			allowNull: false,
+			validate : {
+			}
+		},
+		nip : {
+			type: DataTypes.STRING(15),
+			unique:false,
+			allowNull: false,
+			validate : {
+			}
+		},
+		street_address: {
+			type: DataTypes.STRING(255),
+			allowNull: false,
+			validate : {
+			}
+		},
+		house_address: {
+			type: DataTypes.STRING(10),
+			allowNull: false,
+			validate : {
+			}
+		},
+		flat_address: {
+			type: DataTypes.STRING(10),
+			validate : {
+			}
+		},
+		zipcode_address: {
+			type: DataTypes.STRING(10),
+			allowNull: false,
+			validate : {
+				is: /^[0-9]{2}-[0-9]{3}$/,
+			}
+		},
+		city_address: {
+			type: DataTypes.STRING(45),
+			allowNull: false,
+			validate : {
+			}
+		},
+		is_mail_address: {
+			//czy adres korespondencyjny jest taki sam
+			type:DataTypes.ENUM('yes','no'),
+			defaultValue:'yes',
+			allowNull: false
+		},
+		name_mail: {
+			type: DataTypes.STRING(255),
+			allowNull: false,
+			validate : {
+			}
+		},
+		street_mail: {
+			type: DataTypes.STRING(255),
+			allowNull: false,
+			validate : {
+			}
+		},
+		house_mail: {
+			type: DataTypes.STRING(10),
+			allowNull: false,
+			validate : {
+			}
+		},
+		flat_mail: {
+			type: DataTypes.STRING(10),
+			validate : {
+			}
+		},
+		zipcode_mail: {
+			type: DataTypes.STRING(10),
+			allowNull: false,
+			validate : {
+				is: /^[0-9]{2}-[0-9]{3}$/,
+			}
+		},
+		city_mail: {
+			type: DataTypes.STRING(45),
+			allowNull: false,
+			validate : {
+			}
+		},
+		firstname: {
+			type: DataTypes.STRING(45),
+			allowNull: false,
+			validate : {
+			}
+		},
+		lastname: {
+			type: DataTypes.STRING(45),
+			allowNull: false,
+			validate : {
+			}
+		},
+		phone: {
+			type: DataTypes.STRING(15),
+			allowNull: false,
+			validate : {
+			}
+		}
 	}, {
 		paranoid: true,
 		classMethods: {
