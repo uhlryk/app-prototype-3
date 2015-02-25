@@ -131,6 +131,7 @@ module.exports = function(config, cb, models){
 			t.rollback();
 			console.log(err);
 			if (err.code){
+				cb({status :422, code : err.code});
 			} else{
 				cb({status :500});
 			}
