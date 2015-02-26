@@ -47,7 +47,17 @@ router.post("/customers/", function(req, res, next){
 router.get('/customers', require('./customers/list'));
 router.get('/customers/:id', require('./customers/single'));
 
-router.post('/payments', require('./payments/create'));
+router.post("/payments", function(req, res, next){
+	var data = req.body;
+	if(data.type !== "package" && data.type !== "fee"){
+		return res.sendData({status :422, code : "WRONG_PAYMENT_TYPE"});
+	}
+	req.actions.payments.create({
+		data : data
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
 router.get('/payments', require('./payments/list'));
 
 router.get('/orders', require('./orders/list'));

@@ -1,10 +1,10 @@
 var bcrypt = require('bcrypt');
-module.exports = function(req, res, next){
-	var data = req.body;
-	req.models.sequelize.transaction().then(function (t) {
-		return 	req.models.Partner.find({
+module.exports = function(config, cb, models){
+	var data = config.data;
+	models.sequelize.transaction().then(function (t) {
+		return 	models.Partner.find({
 			include : [
-				req.models.Place
+				models.Place
 			],
 			where : {
 				id : data.partnerId,
@@ -14,31 +14,30 @@ module.exports = function(req, res, next){
 		.then(function(partner){
 			if(partner === null)
 			{
-				throw new Error("brak partnera");
+				throw {code : "INCORECT_PARTNER_PLACE"};
 			}else{
-				return req.models.Payment.create({
+				return models.Payment.create({
 					money : data.money,
 					PartnerId : data.partnerId,
 					PlaceId : data.placeId,
-			//		date_use : data.date_use,
 					type : data.type,
 					title : data.title
-				}, {transaction : t})
-				;
+				}, {transaction : t});
 			}
 		})
 		.then(function(){
 			t.commit();
-			res.sendStatus(200);
+			cb({status :200 });
 		})
 		.catch(function(err){
 			t.rollback();
-			console.log("BŁĄD");
 			console.log(err);
-			console.log("BŁĄD");
-			res.sendStatus(406);
-		})
-		;
+			if (err.code){
+				cb({status :422, code : err.code});
+			} else{
+				cb({status :500});
+			}
+		});
 	});
 
 };

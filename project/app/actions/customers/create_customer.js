@@ -135,7 +135,6 @@ module.exports = function(config, cb, models){
 			} else{
 				cb({status :500});
 			}
-		})
-		;
+		});
 	});
 };
