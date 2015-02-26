@@ -30,12 +30,19 @@ router.get('/partners', require('./partners/list'));
 router.get("/partners/:id", require('./partners/single'));
 router.post('/partners', require('./partners/create'));
 
-router.post('/cards-bundle', require('./cardsbundle/create'));
+// router.post('/cards-bundle', require('./cardsbundle/create'));
+router.post("/cards-bundle", function(req, res, next){
+	req.actions.cardsbundles.create({
+		data : req.body
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
+
 router.get('/cards-bundle', require('./cardsbundle/list'));
 
 router.get('/cards/:bundleId', require('./cards/list'));
 
-// router.post('/customers', require('./customers/create'));
 router.post("/customers/", function(req, res, next){
 	req.actions.customers.createCustomer({
 		data : req.body
