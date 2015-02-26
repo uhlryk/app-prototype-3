@@ -28,7 +28,6 @@ module.exports = function(config, cb, models){
 				data.mail.zipcode_mail = data.firm.zipcode_address;
 				data.mail.city_mail = data.firm.city_address;
 			}
-	console.log(data);
 			return models.Customer.create({
 				status : "active",
 				firmname : data.firm.firmname,

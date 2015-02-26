@@ -17,7 +17,7 @@ router.post("/authenticate/partner", require('./authenticate/partner'));
 router.post("/authenticate/admin", require('./authenticate/admin'));
 
 router.post("/customer/account/", function(req, res, next){
-	req.actions.customers.createCustomer({
+	req.actions.customers.createMain({
 		data : req.body
 	}, function(responseData){
 		res.sendData(responseData);

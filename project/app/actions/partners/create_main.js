@@ -1,10 +1,9 @@
 var bcrypt = require('bcrypt');
-module.exports = function(req, res, next){
-	var data = req.body;
-	console.log(JSON.stringify(data.location.province));
+module.exports = function(config, cb, models){
+	var data = config.data;
 	var partnerAccountModel, partnerModel, placeModel;
-	req.models.sequelize.transaction().then(function (t) {
-		return req.models.PartnerAccount.create({
+	models.sequelize.transaction().then(function (t) {
+		return models.PartnerAccount.create({
 			type : "parent",
 			status : "active",
 			email : data.account.login,
@@ -14,7 +13,15 @@ module.exports = function(req, res, next){
 			partnerAccountModel = partnerAccount;
 		})
 		.then(function(){
-			return req.models.Partner.create({
+			if(data.firm.is_mail_address){
+				data.mail.name_mail = data.firm.firmname;
+				data.mail.street_mail = data.firm.street_address;
+				data.mail.house_mail = data.firm.house_address;
+				data.mail.flat_mail = data.firm.flat_address;
+				data.mail.zipcode_mail = data.firm.zipcode_address;
+				data.mail.city_mail = data.firm.city_address;
+			}
+			return models.Partner.create({
 				status : "active",
 				firmname : data.firm.firmname,
 				nip : data.firm.nip,
@@ -42,7 +49,7 @@ module.exports = function(req, res, next){
 			return partnerModel.setPartnerAccounts([partnerAccountModel], {transaction : t});
 		})
 		.then(function(){
-			return req.models.Place.create({
+			return models.Place.create({
 				name : data.location.name
 			}, {transaction : t});
 		})
@@ -56,9 +63,9 @@ module.exports = function(req, res, next){
 			return partnerModel.setPlaces([placeModel], {transaction : t});
 		}, {transaction : t})
 		.then(function(){
-			return req.models.sequelize.Promise.map(data.location.province, function(provinceData) {
+			return models.sequelize.Promise.map(data.location.province, function(provinceData) {
 				var provinceModel;
-				return req.models.Location.find({
+				return models.Location.find({
 					where : {
 						id : provinceData.id,
 						level : 1
@@ -67,21 +74,21 @@ module.exports = function(req, res, next){
 				.then(function(province){
 					provinceModel = province;
 					if(province === null){
-						throw new Error("brak województwa " + provinceData.id);
+						throw new Error("WRONG_PROVINCE");
 					}
 				})
 				.then(function(){
 					var isAll = provinceData.district.length > 0 ? false : true;
-					return req.models.PlaceLocation.create({
+					return models.PlaceLocation.create({
 						PlaceId : placeModel.id,
 						LocationId : provinceModel.id,
 						isAll : isAll
 					}, {transaction : t});
 				})
 				.then(function(){
-					return req.models.sequelize.Promise.map(provinceData.district, function(districtData) {
+					return models.sequelize.Promise.map(provinceData.district, function(districtData) {
 						var districtModel;
-						return req.models.Location.find({
+						return models.Location.find({
 							where : {
 								id : districtData.id,
 								LocationId : provinceModel.id, //czy lokacja ma poprawną lokację nadrzędną
@@ -91,21 +98,21 @@ module.exports = function(req, res, next){
 						.then(function(district){
 							districtModel = district;
 							if(district === null){
-								throw new Error("brak powiatu " + districtData.id);
+								throw new Error("WRONG_DISTRICT");
 							}
 						})
 						.then(function(){
 							var isAll = districtData.community.length > 0 ? false : true;
-							return req.models.PlaceLocation.create({
+							return models.PlaceLocation.create({
 								PlaceId : placeModel.id,
 								LocationId : districtModel.id,
 								isAll : isAll
 							}, {transaction : t});
 						})
 						.then(function(){
-							return req.models.sequelize.Promise.map(districtData.community, function(communityData) {
+							return models.sequelize.Promise.map(districtData.community, function(communityData) {
 								var communityModel;
-								return req.models.Location.find({
+								return models.Location.find({
 									where : {
 										id : communityData.id,
 										LocationId : districtModel.id, //czy lokacja ma poprawną lokację nadrzędną
@@ -115,11 +122,11 @@ module.exports = function(req, res, next){
 								.then(function(community){
 									communityModel = community;
 									if(community === null){
-										throw new Error("brak gminy " + communityData.id);
+										throw new Error("WRONG_COMMUNITY");
 									}
 								})
 								.then(function(){
-									return req.models.PlaceLocation.create({
+									return models.PlaceLocation.create({
 										PlaceId : placeModel.id,
 										LocationId : communityModel.id,
 										isAll : false
@@ -137,15 +144,25 @@ module.exports = function(req, res, next){
 		})
 		.then(function(){
 			t.commit();
-			res.sendStatus(200);
+			cb({status :200 });
+		})
+		.catch(models.Sequelize.ValidationError, function (err) {
+			t.rollback();
+			if(err.name === 'SequelizeUniqueConstraintError'){
+				cb({status :422, code : "DUPLICATE_USER"});
+			} else {
+				cb({status :500});
+			}
+			console.log(err);
 		})
 		.catch(function(err){
 			t.rollback();
-			console.log("BŁĄD");
 			console.log(err);
-			console.log("BŁĄD");
-			res.sendStatus(406);
-		})
-		;
+			if (err.code){
+				cb({status :422, code : err.code});
+			} else{
+				cb({status :500});
+			}
+		});
 	});
 };

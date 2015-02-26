@@ -28,9 +28,13 @@ router.use(function(req, res, next){
 });
 router.get('/partners', require('./partners/list'));
 router.get("/partners/:id", require('./partners/single'));
-router.post('/partners', require('./partners/create'));
-
-// router.post('/cards-bundle', require('./cardsbundle/create'));
+router.post("/partners/", function(req, res, next){
+	req.actions.partners.createMain({
+		data : req.body
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
 router.post("/cards-bundle", function(req, res, next){
 	req.actions.cardsbundles.create({
 		data : req.body
@@ -44,7 +48,7 @@ router.get('/cards-bundle', require('./cardsbundle/list'));
 router.get('/cards/:bundleId', require('./cards/list'));
 
 router.post("/customers/", function(req, res, next){
-	req.actions.customers.createCustomer({
+	req.actions.customers.createMain({
 		data : req.body
 	}, function(responseData){
 		res.sendData(responseData);
