@@ -43,9 +43,29 @@ router.post("/cards-bundle", function(req, res, next){
 	});
 });
 
-router.get('/cards-bundle', require('./cardsbundle/list'));
+// router.get('/cards-bundle', require('./cardsbundle/list'));
+router.get("/cards-bundle/", function(req, res, next){
+	var query = req.query;
+	req.actions.cardsbundles.list({
+		query : {
+			page : query.page
+		}
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
 
-router.get('/cards/:bundleId', require('./cards/list'));
+router.get("/cards/", function(req, res, next){
+	var query = req.query;
+	req.actions.cards.list({
+		query : {
+			bundleId : query.bundleId,
+			page : query.page
+		}
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
 
 router.post("/customers/", function(req, res, next){
 	req.actions.customers.createMain({
