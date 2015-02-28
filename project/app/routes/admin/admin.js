@@ -26,7 +26,18 @@ router.use(function(req, res, next){
 		});
 	}
 });
-router.get('/partners', require('./partners/list'));
+
+router.get("/partners/", function(req, res, next){
+	var query = req.query;
+	req.actions.partners.list({
+		query : {
+			page : query.page
+		}
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
+
 router.get("/partners/:id", require('./partners/single'));
 router.post("/partners/", function(req, res, next){
 	req.actions.partners.createMain({
@@ -42,8 +53,6 @@ router.post("/cards-bundle", function(req, res, next){
 		res.sendData(responseData);
 	});
 });
-
-// router.get('/cards-bundle', require('./cardsbundle/list'));
 router.get("/cards-bundle/", function(req, res, next){
 	var query = req.query;
 	req.actions.cardsbundles.list({
@@ -74,8 +83,16 @@ router.post("/customers/", function(req, res, next){
 		res.sendData(responseData);
 	});
 });
-
-router.get('/customers', require('./customers/list'));
+router.get("/customers/", function(req, res, next){
+	var query = req.query;
+	req.actions.customers.list({
+		query : {
+			page : query.page
+		}
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
 router.get('/customers/:id', require('./customers/single'));
 
 router.post("/payments", function(req, res, next){
@@ -89,7 +106,17 @@ router.post("/payments", function(req, res, next){
 		res.sendData(responseData);
 	});
 });
-router.get('/payments', require('./payments/list'));
+router.get("/payments/", function(req, res, next){
+	var query = req.query;
+	req.actions.payments.list({
+		query : {
+			partnerId : query.partnerId,
+			page : query.page
+		}
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
 
 router.get('/orders', require('./orders/list'));
 
