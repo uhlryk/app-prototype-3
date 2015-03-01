@@ -81,7 +81,7 @@ router.post("/customers/", function(req, res, next){
 });
 router.get("/customers/", function(req, res, next){
 	var query = req.query;
-	req.actions.customers.list({
+	req.actions.customers.listMain({
 		query : {
 			page : query.page
 		}

@@ -8,6 +8,10 @@ module.exports = function(config, cb, models){
 	if(Number.isNaN(partnerAccountId) === false) {
 		where.PartnerAccountId = partnerAccountId;
 	}
+	var customerId = Number(query.customerId);
+	if(Number.isNaN(customerId) === false) {
+		where['Card.CustomerId'] = customerId;
+	}
 	models.Order.findAll({
 		include: [
 			{
@@ -26,7 +30,8 @@ module.exports = function(config, cb, models){
 	.then(function(orders) {
 		orderList = orders;
 		return models.Order.count({
-			where : where
+			where : where,
+			include: [models.Card]
 		});
 	})
 	.then(function(count) {

@@ -34,13 +34,43 @@ router.use(function(req, res, next){
 		});
 	}
 });
-router.get('/cards/', require('./cards/list'));
+router.get("/cards/", function(req, res, next){
+	var query = req.query;
+	req.actions.cards.list({
+		query : {
+			customerId : req.user.data.customerId,
+			page : query.page
+		}
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
+
 router.post('/cards/add', require('./cards/add'));
 router.post('/cards/create', require('./cards/create'));
 
-router.get('/accounts/', require('./accounts/list'));
+router.get("/accounts/", function(req, res, next){
+	var query = req.query;
+	req.actions.customers.listAccount({
+		query : {
+			customerId : req.user.data.customerId,
+			page : query.page
+		}
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
 router.post('/accounts/', require('./accounts/create'));
 
-router.get('/orders/', require('./orders/list'));
-
+router.get("/orders/", function(req, res, next){
+	var query = req.query;
+	req.actions.orders.list({
+		query : {
+			customerId : req.user.data.customerId,
+			page : query.page
+		}
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
 module.exports = router;

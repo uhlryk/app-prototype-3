@@ -1,13 +1,16 @@
 module.exports = function(config, cb, models){
 	var query = config.query;
 	var bundleId = Number(query.bundleId);
+	var customerId = Number(query.customerId);
 	var page = Number(query.page) || 1;
 	var size = 10;
 	var where = {};
-
 	var cardList;
 	if(Number.isNaN(bundleId) === false) {
 		where.CardBundleId = bundleId;
+	}
+	if(Number.isNaN(customerId) === false) {
+		where.CustomerId = customerId;
 	}
 	models.Card.findAll({
 		where : where,
