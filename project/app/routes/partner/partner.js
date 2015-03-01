@@ -29,8 +29,26 @@ router.use(function(req, res, next){
 });
 
 router.post('/orders', require('./orders/create'));
-router.get('/orders', require('./orders/list'));
-
-router.get('/payments', require('./payments/list'));
-
+router.get("/orders/", function(req, res, next){
+	var query = req.query;
+	req.actions.orders.list({
+		query : {
+			partnerAccountId : req.user.id,
+			page : query.page
+		}
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
+router.get("/payments/", function(req, res, next){
+	var query = req.query;
+	req.actions.payments.list({
+		query : {
+			partnerId : req.user.data.partnerId,
+			page : query.page
+		}
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
 module.exports = router;

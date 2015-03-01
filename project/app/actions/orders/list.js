@@ -4,8 +4,8 @@ module.exports = function(config, cb, models){
 	var size = 10;
 	var orderList;
 	var where = {};
-	var partnerId = Number(query.partnerAccountId);
-	if(Number.isNaN(partnerId) === false) {
+	var partnerAccountId = Number(query.partnerAccountId);
+	if(Number.isNaN(partnerAccountId) === false) {
 		where.PartnerAccountId = partnerAccountId;
 	}
 	models.Order.findAll({
