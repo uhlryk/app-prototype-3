@@ -60,16 +60,27 @@ router.get("/accounts/", function(req, res, next){
 		res.sendData(responseData);
 	});
 });
-router.post('/accounts/', require('./accounts/create'));
+router.post("/accounts/", function(req, res, next){
+	req.actions.customers.createAccount({
+		data : req.body,
+		query : {
+			customerId : req.user.data.customerId
+		}
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
 
 router.get("/orders/", function(req, res, next){
 	var query = req.query;
+	console.log("a1");
 	req.actions.orders.list({
 		query : {
 			customerId : req.user.data.customerId,
 			page : query.page
 		}
 	}, function(responseData){
+		console.log("a2");
 		res.sendData(responseData);
 	});
 });

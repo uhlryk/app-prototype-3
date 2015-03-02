@@ -13,19 +13,21 @@ module.exports = function(config, cb, models){
 		where['Card.CustomerId'] = customerId;
 	}
 	models.Order.findAll({
+		where : where,
+		limit: size,
+		offset: (page-1)*size,
 		include: [
 			{
 				model : models.Card,
 				include : [models.Customer]
 			},
-			models.Score, models.Payment,
+			models.Score,
 			{
 				model : models.PartnerAccount,
 				include : [models.Partner]
 			},
 			models.Place
 		],
-		where : where
 	})
 	.then(function(orders) {
 		orderList = orders;

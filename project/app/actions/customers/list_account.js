@@ -9,6 +9,8 @@ module.exports = function(config, cb, models){
 		where.CustomerId = customerId;
 	}
 	models.CustomerAccount.findAll({
+		limit: size,
+		offset: (page-1)*size,
 		where : where,
 		include : [models.Customer, models.Card]
 	})
