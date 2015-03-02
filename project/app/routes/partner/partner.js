@@ -27,8 +27,17 @@ router.use(function(req, res, next){
 		});
 	}
 });
+router.post("/orders/", function(req, res, next){
+	req.actions.orders.create({
+		percentageApp : 2,
+		convCashScore : 12.5,
+		partnerAccountId : req.user.id,
+		data : req.body
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
 
-router.post('/orders', require('./orders/create'));
 router.get("/orders/", function(req, res, next){
 	var query = req.query;
 	req.actions.orders.list({

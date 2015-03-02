@@ -1,4 +1,3 @@
-var bcrypt = require('bcrypt');
 module.exports = function(config, cb, models){
 	var query = config.query;
 	var customerId = Number(query.customerId);
