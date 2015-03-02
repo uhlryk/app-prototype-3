@@ -45,9 +45,32 @@ router.get("/cards/", function(req, res, next){
 		res.sendData(responseData);
 	});
 });
+router.post("/cards/add/", function(req, res, next){
+	req.actions.cards.add({
+		data : req.body,
+		query : {
+			customerId : req.user.data.customerId,
+			customerAccountId : req.user.id
+		}
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
+router.post("/cards/create/", function(req, res, next){
+	req.actions.cards.create({
+		data : req.body,
+		query : {
+			customerId : req.user.data.customerId,
+			customerAccountId : req.user.id
+		}
+	}, function(responseData){
+		res.sendData(responseData);
+	});
+});
 
-router.post('/cards/add', require('./cards/add'));
-router.post('/cards/create', require('./cards/create'));
+//router.post('/cards/create', require('./cards/create'));
+
+
 
 router.get("/accounts/", function(req, res, next){
 	var query = req.query;
