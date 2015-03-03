@@ -34,6 +34,7 @@
     "gulp-prompt": "^0.1.1",
     "gulp-util": "^3.0.2",
     "node-uuid": "^1.4.2",
+    "rescode": "^0.1.10",
     "tern-node-express": "^0.1.0"
   }
 }

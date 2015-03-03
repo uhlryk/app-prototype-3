@@ -11,7 +11,6 @@ module.exports = function(config){
 	});
 	controllerList.forEach(function(controller) {
 		actions[controller] = {};
-		console.log(path.join(__dirname, controller));
 		var actionPath = path.join(__dirname, controller);
 		fs.readdirSync(actionPath)
 		.filter(function(file) {
@@ -46,6 +45,5 @@ module.exports = function(config){
 			};
 		});
 	});
-	console.log(actions);
 	return actions;
 };

@@ -6,6 +6,9 @@ var router = new express.Router();
 
 router.use(function(req, res, next){
 	var token = req.headers['access-token'];
+	if(token === undefined){
+		token = req.query['access-token'];
+	}
 	if(token){
 		req.redis.get('t_' + token, function(error, result) {
 			var user = JSON.parse(result);
@@ -24,6 +27,8 @@ router.use(function(req, res, next){
 				}
 			}
 		});
+	} else {
+		res.sendStatus(401);
 	}
 });
 router.get("/partners/", function(req, res, next){
@@ -61,6 +66,32 @@ router.get("/cards-bundle/", function(req, res, next){
 		res.sendData(responseData);
 	});
 });
+router.get("/cards/ean/:id", function(req, res, next){
+	req.actions.cards.getImage({
+		type : "ean13",
+		cardId : req.params.id
+	}, function(responseData){
+		if(responseData.status === 200){
+			res.setHeader("Content-Type","image/png");
+			res.end(responseData.data);
+		}else {
+			res.sendData(responseData);
+		}
+	});
+});
+router.get("/cards/qrcode/:id", function(req, res, next){
+	req.actions.cards.getImage({
+		type : 'qrcode',
+		cardId : req.params.id
+	}, function(responseData){
+		if(responseData.status === 200){
+			res.setHeader("Content-Type","image/png");
+			res.end(responseData.data);
+		}else {
+			res.sendData(responseData);
+		}
+	});
+});
 router.get("/cards/", function(req, res, next){
 	var query = req.query;
 	req.actions.cards.list({
@@ -72,6 +103,7 @@ router.get("/cards/", function(req, res, next){
 		res.sendData(responseData);
 	});
 });
+
 router.post("/customers/", function(req, res, next){
 	req.actions.customers.createMain({
 		data : req.body
