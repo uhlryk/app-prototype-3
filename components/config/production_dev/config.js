@@ -5,11 +5,11 @@ module.exports = {
 	db : {
 		normal : {
 			type : 'mysql',
-			host : 'localhost',
+			host : '127.0.0.1',
 			dbname : 'loyteam',
 			user : 'root',
-			pass : 'root',
-			port : '8889'
+			pass : 'kjsa73^hw',
+			port : '3306'
 		},
 		session : {
 			type : 'redis',
@@ -18,10 +18,13 @@ module.exports = {
 			pass : ''
 		}
 	},
+	cors : {
+		origin : "http://oculusriftsoftware.com"
+	},
 	logType : "dev",
 	appPercentage : 1,
 	adminAuth : {
-		login : "admin",
+		login : "admin@loyteam.pl",
 		pass : "aaaaaa6"
 	}
 };
