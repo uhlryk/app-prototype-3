@@ -57,28 +57,8 @@ gulp.task('upload_production_dev', function () {
 		path: '~/projects/loyteam/server_project/'
 	}));
 });
-// var setMaintanceCmd = "touch public_html/maintance";
-// var unsetMaintanceCmd = "rm public_html/maintance";
-/**
- * poprzez ssh ustawia flagę maintance
- */
-// gulp.task('set_maintance', function () {
-// 	return gulpSSH(authSSHProductionDev)
-// 	.shell(['cd /home/eventum/domains/swiatodszkodowan.pl', setMaintanceCmd]);
-// });
-/**
- * poprzez ssh wyłącza flagę maintance
- */
-// gulp.task('unset_maintance', function () {
-// 	return gulpSSH(authSSHProductionDev)
-// 	.shell(['cd /home/eventum/domains/swiatodszkodowan.pl', unsetMaintanceCmd]);
-// });
-/**
- * w trakcie operacji ustawia flagę maintance
- * poprzez ssh rozpakowuje na serwerze dane i usuwa plik zip
- */
 gulp.task('install_production_dev', function () {
 	return gulpSSH(authSSHProductionDev)
-	.shell(['cd ~/projects/loyteam/server_project', 'unzip -o app.zip -d .', 'rm app.zip', 'npm install', 'forever restartall'], {filePath: 'production_dev_unzip.log'})
+	.shell(['cd ~/projects/loyteam/server_project', 'forever stopall', 'unzip -o app.zip -d .', 'rm app.zip', 'npm install', 'cd ..', 'sh starter.sh'], {filePath: 'production_dev_unzip.log'})
 	.pipe(gulp.dest('logs'));
 });
