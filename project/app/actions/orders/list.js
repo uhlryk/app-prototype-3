@@ -4,29 +4,43 @@ module.exports = function(config, cb, models){
 	var size = 10;
 	var orderList;
 	var where = {};
+	var whereCard = {};
 	var partnerAccountId = Number(query.partnerAccountId);
 	if(Number.isNaN(partnerAccountId) === false) {
 		where.PartnerAccountId = partnerAccountId;
 	}
 	var customerId = Number(query.customerId);
 	if(Number.isNaN(customerId) === false) {
-		where['Card.CustomerId'] = customerId;
+		whereCard.CustomerId = customerId;
 	}
 	models.Order.findAll({
 		where : where,
 		limit: size,
 		offset: (page-1)*size,
+		attributes: ['order_code', 'money_order', 'money_app', 'money_score', 'order_document'],
 		include: [
 			{
 				model : models.Card,
-				include : [models.Customer]
-			},
-			models.Score,
-			{
+				attributes: ['ean_code', 'CustomerId'],
+				where : whereCard,
+				include : [{
+					model : models.Customer,
+					attributes : ['firmname'],
+				}]
+			}, {
+				model : models.Score,
+				attributes: ['score'],
+			}, {
 				model : models.PartnerAccount,
-				include : [models.Partner]
-			},
-			models.Place
+				attributes: ['email','PartnerId'],
+				include : [{
+					attributes: ['firmname'],
+					model : models.Partner
+				}]
+			}, {
+				model : models.Place,
+				attributes: ['name'],
+			}
 		],
 	})
 	.then(function(orders) {
