@@ -85,12 +85,14 @@ module.exports = function(config, cb, models){
 				}) ;
 			} else{
 				return models.Card.find({
-					include : [
-						models.CardBundle
-					],
+					include : [{
+						model: models.CardBundle,
+						where : {
+							type : data.type
+						},
+					}],
 					where : {
 						status : "inactive",
-						'CardBundle.type' : data.type
 					}
 				}, {transaction : t})
 				.then(function(card) {
