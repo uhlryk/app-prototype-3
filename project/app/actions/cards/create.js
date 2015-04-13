@@ -6,12 +6,14 @@ module.exports = function(config, cb, models){
 	var cardModel;
 	models.sequelize.transaction().then(function (t) {
 		return models.Card.find({
-			include : [
-				models.CardBundle
-			],
+			include : [{
+				model: models.CardBundle,
+				where : {
+					type : data.card.type
+				},
+			}],
 			where : {
-				status : "inactive",
-				'CardBundle.type' : data.card.type
+				status : "inactive"
 			}
 		}, {transaction : t})
 		.then(function(card){

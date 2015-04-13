@@ -19,7 +19,7 @@ module.exports = {
 		}
 	},
 	cors : {
-		origin : "http://oculusriftsoftware.com"
+		origin : "*"
 	},
 	logType : "dev",
 	appPercentage : 1,
