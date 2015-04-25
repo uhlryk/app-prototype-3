@@ -30,11 +30,17 @@ module.exports = function(config, cb, models){
 		.then(function(){
 			return 	models.PartnerAccount.find({
 				include : [
-					models.Place, models.Partner
+					{
+						model: models.Place,
+						where : {
+							id : data.order.place
+						},
+					},
+					models.Partner
 				],
 				where : {
-					id : partnerAccountId,
-					'Places.id' : data.order.place
+					id : partnerAccountId
+
 				}
 			}, {transaction : t});
 		})
